@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+
+            .board{
+                display: grid;
+                grid-template-columns: 100px 100px 100px;
+                grid-template-rows: 100px 100px 100px;
+                gap: 5px;
+                
+            }
+            .square{
+                width: 100px;
+                height: 100px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid black;
+            }
+            .square:hover{
+                background-color: #e4e4e4;
+            }
+            #turn{
+                border: 1px solid black;
+                margin-bottom: 10px;
+                padding:10px;
+                width: 150px;
+
+            }
+            #win{
+                border: 1px solid black;
+                margin-top: 10px;
+                padding:10px;
+                width: 150px;
+            }
+        </style>
+        <body>
+            <h1> Tic Tac Toe: Let's play!</h1>
+            
+            <div id="turn">Player X's turn</div>
+            
+            <div class="board">
+                <script>
+                    const NUM_SQUARES = 9;
+                    for (i=0; i<NUM_SQUARES; i++)
+                    {//id starts from 0 counting from left to right
+                    id = "sq"+i; //grabbing id for script here
+                    document.write( "<div class='square' id='" + id + "'></div>" );
+                    }
+                    
+                </script>
+                </div>
+            <div id="win">Status?</div>
+            <button onclick="start()"> Restart Game</button>
+            <script>
+                //document.getElementById("sq2").innerHTML = "X";
+                //document.getElementById("sq3").innerHTML = "O";
+                var player = "X";
+                var gameOver = false;
+                
+                if(Math.random() > .5){
+                    player = "X";
+                } else{
+                    player = "O";
+                }
+                document.getElementById("turn").innerHTML = "Player " + player + "'s turn!";
+                
+                function clicked(){
+                    if(gameOver){
+                        return;
+                    }
+
+                    if(this.innerHTML != ""){
+                        return; //if not empty don't do anything
+                    }
+            
+                    this.innerHTML = player;
+                    if(player == "X"){
+                        player = "O"; //switch current player
+                    }
+                    else{
+                        player = "X";
+                    }
+                    document.getElementById("turn").innerHTML = "Player " + player + "'s turn!";
+
+                    var moves = [];
+                    
+                    for (i=0; i<NUM_SQUARES; i++)
+                    {
+                    moves[i] = document.getElementById("sq" + i).innerHTML;
+
+                    }
+                    moves.forEach(function(move, i){
+                        if(move == ""){
+                            moves[i] ="-";
+                        }
+                    });
+                    var winConditions = [
+                        moves[0] + moves[1] + moves[2],
+                        moves[3] + moves[4] + moves[5],
+                        moves[6] + moves[7] + moves[8],
+                        moves[0] + moves[3] + moves[6],
+                        moves[1] + moves[4] + moves[7],
+                        moves[2] + moves[5] + moves[8],
+                        moves[0] + moves[4] + moves[8],
+                        moves[2] + moves[4] + moves[6]
+                    ]; //all possible ways to win
+
+                    var winner = "";
+                    winConditions.forEach(function(win){
+                        if(win == "XXX"){
+                            winner = "X";
+                        } else if(win == "OOO"){
+                            winner = "O";
+                        } //setting winning pattern
+                    });
+                    
+                    var hasHyphen = false;
+                    moves.forEach(function(move){
+                        if(move == "-"){
+                            hasHyphen = true; //empty
+                        }
+                    });
+
+                    if(winner != ""){
+                        document.getElementById("win").innerHTML = "Player " + winner + " wins!";
+                        gameOver = true;
+                    } else if(!hasHyphen){
+                        document.getElementById("win").innerHTML = "Stalemate!";
+                        gameOver = true;
+                    }
+
+                }
+
+
+                for (i=0; i<NUM_SQUARES; i++)
+                    {
+                    document.getElementById("sq" + i).onclick = clicked;
+
+                    }
+                function start(){
+                    for (i=0; i<NUM_SQUARES; i++)
+                    {
+                    document.getElementById("sq" + i).innerHTML = "";
+
+                    }
+                    if(Math.random() > .5){
+                    player = "X"; //randomly setting based on the number generated
+                } else{
+                    player = "O";
+                }
+                    document.getElementById("turn").innerHTML = "Player " + player + "'s turn!";
+                    document.getElementById("win").innerHTML = "Status? ";
+                    gameOver = false;
+                    
+                }
+                    
+            </script>
+            
+        </body>
+        
+    </head>
+</html>
